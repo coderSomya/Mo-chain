@@ -2,14 +2,27 @@ package main
 
 import (
 	"mochain/network"
+	"time"
 )
 
 func main(){
 
-	trlocal := network.NewLocalTransport("LOCAL")
+	trLocal := network.NewLocalTransport("LOCAL")
+	trRemote := network.NewLocalTransport("REMOTE")
+
+	trLocal.Connect(trRemote)
+	trRemote.Connect(trLocal)
+
 	opts := network.ServerOpts{
-		Transports: []network.Transport{trlocal},
+		Transports: []network.Transport{trLocal},
 	}
+
+	go func(){
+		for {
+			trRemote.SendMessage(trLocal.Addr(), []byte("Hello world"))
+			time.Sleep(5* time.Second)
+		}
+	}()
 
 	server := network.NewServer(opts)
 
