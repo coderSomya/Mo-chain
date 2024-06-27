@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"mochain/network"
 )
 
@@ -16,5 +15,5 @@ func main(){
 
 	print(server)
 
-	fmt.Println("Hello world!")
+	server.Start()
 }
